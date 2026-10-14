@@ -15,10 +15,24 @@ export default function HomeScreen({ navigation }) {
           styles.loginButton,
           pressed && styles.loginButtonPressed,
         ]}
-        onPress={() => navigation.navigate("Register")}
+        onPress={() => navigation.navigate("Login")}
       >
         <Text style={styles.loginButtonText}>Logga in</Text>
       </Pressable>
+
+
+
+      <Pressable
+        style={({ pressed }) => [
+          styles.registerButton,
+          pressed && styles.buttonPressed,
+        ]}
+        onPress={() => navigation.navigate("Register")}
+      >
+        <Text style={styles.registerButtonText}>Skapa konto</Text>
+      </Pressable>
+
+
 
     </View>
   );
@@ -55,5 +69,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
   },
+
+  registerButton: {
+    backgroundColor: colours.sage,
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    borderRadius: 12,
+    minWidth: 180,
+    alignItems: "center",
+    marginTop: 16,
+  },
+  registerButtonText: {
+    color: colours.bark,
+    fontSize: 18,
+    fontWeight: "600",
+  },
+
 
 });
