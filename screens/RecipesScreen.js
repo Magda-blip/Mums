@@ -14,7 +14,15 @@ export default function RecipesScreen({ navigation }) {
         data={recipes}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Pressable style={styles.recipeCard}>
+          <Pressable style={styles.recipeCard}
+            onPress={() =>
+              navigation.navigate("RecipeDetail",
+                {
+                  recipeId: item.id,
+
+                })
+            }
+          >
             <Text style={styles.recipeName}>{item.name}</Text>
 
             <Text style={styles.description}>
@@ -24,8 +32,15 @@ export default function RecipesScreen({ navigation }) {
             <Text style={styles.time}>
               Tillagningstid: {item.cookingTime} minuter
             </Text>
+
+
+
           </Pressable>
+
+
+
         )}
+
       />
 
       <Pressable

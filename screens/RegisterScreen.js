@@ -7,8 +7,10 @@ import {
   Platform,
   ScrollView,
   TextInput,
-  SafeAreaView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+
 import { colours } from "../constants/Colours.js";
 import { fonts } from "../constants/Fonts.js";
 

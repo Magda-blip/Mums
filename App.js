@@ -8,6 +8,7 @@ import { fonts } from "./constants/Fonts";
 import RegisterScreen from "./screens/RegisterScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RecipesScreen from "./screens/RecipesScreen";
+import RecipeDetailScreen from "./screens/RecipeDetailScreen";
 
 
 
@@ -48,6 +49,10 @@ export default function App() {
         <Stack.Screen
           name="Recipes"
           component={RecipesScreen}
+        />
+        <Stack.Screen
+          name="RecipeDetail"
+          component={RecipeDetailScreen}
         />
 
       </Stack.Navigator>
