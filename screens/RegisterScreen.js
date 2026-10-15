@@ -7,6 +7,7 @@ import {
   Platform,
   ScrollView,
   TextInput,
+  SafeAreaView,
 } from "react-native";
 import { colours } from "../constants/Colours.js";
 import { fonts } from "../constants/Fonts.js";
@@ -15,71 +16,73 @@ import { fonts } from "../constants/Fonts.js";
 export default function RegisterScreen({ navigation }) {
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
+    <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
 
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Text style={styles.title}>Bli medlem</Text>
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+          <Text style={styles.title}>Bli medlem</Text>
 
-        <Text style={styles.description}>Skapa ett konto för att hitta och samla mumsigheter!</Text>
-
-
-
-        <View style={styles.form}>
-
-
-          <Text style={styles.label}>Namn</Text>
-
-          <TextInput
-            style={styles.input}
-            placeholder="Namn"
-            placeholderTextColor={colours.bark}
-            autoCapitalize="words"
-          />
-
-          <Text style={styles.label}>E-post</Text>
-
-          <TextInput
-            style={styles.input}
-            placeholder="E-post"
-            placeholderTextColor={colours.bark}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-
-          <Text style={styles.label}>Lösenord</Text>
-
-          <TextInput
-            style={styles.input}
-            placeholder="Lösenord"
-            placeholderTextColor={colours.bark}
-            secureTextEntry
-          />
-
-
-          <Pressable
-            style={styles.button}
-            onPress={() => console.log("Registrera")}
-          >
-            <Text style={styles.buttonText}>Skapa konto</Text>
-          </Pressable>
-
-
-          <Pressable
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.backButtonText}>Tillbaka</Text>
-          </Pressable>
+          <Text style={styles.description}>Skapa ett konto för att hitta och samla mumsigheter!</Text>
 
 
 
+          <View style={styles.form}>
 
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+
+            <Text style={styles.label}>Namn</Text>
+
+            <TextInput
+              style={styles.input}
+              placeholder="Namn"
+              placeholderTextColor={colours.bark}
+              autoCapitalize="words"
+            />
+
+            <Text style={styles.label}>E-post</Text>
+
+            <TextInput
+              style={styles.input}
+              placeholder="E-post"
+              placeholderTextColor={colours.bark}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+
+            <Text style={styles.label}>Lösenord</Text>
+
+            <TextInput
+              style={styles.input}
+              placeholder="Lösenord"
+              placeholderTextColor={colours.bark}
+              secureTextEntry
+            />
+
+
+            <Pressable
+              style={styles.button}
+              onPress={() => console.log("Registrera")}
+            >
+              <Text style={styles.buttonText}>Skapa konto</Text>
+            </Pressable>
+
+
+            <Pressable
+              style={styles.backButton}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={styles.backButtonText}>Tillbaka</Text>
+            </Pressable>
+
+
+
+
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 

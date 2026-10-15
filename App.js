@@ -7,6 +7,7 @@ import HomeScreen from "./screens/HomeScreen";
 import { fonts } from "./constants/Fonts";
 import RegisterScreen from "./screens/RegisterScreen";
 import LoginScreen from "./screens/LoginScreen";
+import RecipesScreen from "./screens/RecipesScreen";
 
 
 
@@ -44,7 +45,10 @@ export default function App() {
           name="Login"
           component={LoginScreen}
         />
-
+        <Stack.Screen
+          name="Recipes"
+          component={RecipesScreen}
+        />
 
       </Stack.Navigator>
     </NavigationContainer>

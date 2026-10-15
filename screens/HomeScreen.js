@@ -32,7 +32,15 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.registerButtonText}>Skapa konto</Text>
       </Pressable>
 
-
+      <Pressable
+        style={({ pressed }) => [
+          styles.RecipesButton,
+          pressed && styles.RecipesButtonPressed,
+        ]}
+        onPress={() => navigation.navigate("Recipes")}
+      >
+        <Text style={styles.RecipesButtonText}>Visa recept</Text>
+      </Pressable>
 
     </View>
   );
@@ -84,6 +92,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
   },
-
+  RecipesButton: {
+    backgroundColor: colours.sage,
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    borderRadius: 12,
+    minWidth: 180,
+    alignItems: "center",
+    marginTop: 16,
+  },
+  RecipesButtonText: {
+    color: colours.bark,
+    fontSize: 18,
+    fontWeight: "600",
+  },
 
 });
