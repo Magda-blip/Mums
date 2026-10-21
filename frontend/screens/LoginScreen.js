@@ -10,10 +10,33 @@ import {
   ScrollView,
 } from "react-native";
 
+import { supabase } from "../lib/supabase";
+import { useState } from "react";
+import { Alert } from "react-native";
+
 import { colours } from "../constants/Colours.js";
 import { fonts } from "../constants/Fonts.js";
 
 export default function LoginScreen({ navigation }) {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  async function handleLogin() {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password: password,
+    });
+
+    if (error) {
+      Alert.alert("Kunde inte logga in", error.message);
+      return;
+    }
+
+    Alert.alert("Inloggad!", "Du har loggat in.");
+    navigation.navigate("Home");
+  }
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -28,8 +51,11 @@ export default function LoginScreen({ navigation }) {
 
         <View style={styles.form}>
           <Text style={styles.label}>E-post</Text>
+
           <TextInput
             style={styles.input}
+            value={email}
+            onChangeText={setEmail}
             placeholder="din@email.se"
             placeholderTextColor={colours.darkBrown}
             keyboardType="email-address"
@@ -39,6 +65,8 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.label}>Lösenord</Text>
           <TextInput
             style={styles.input}
+            value={password}
+            onChangeText={setPassword}
             placeholder="Ditt lösenord"
             placeholderTextColor={colours.darkBrown}
             secureTextEntry
@@ -46,7 +74,7 @@ export default function LoginScreen({ navigation }) {
 
           <Pressable
             style={styles.button}
-            onPress={() => console.log("Logga in")}
+            onPress={handleLogin}
           >
             <Text style={styles.buttonText}>Logga in</Text>
           </Pressable>

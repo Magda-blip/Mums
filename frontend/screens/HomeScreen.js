@@ -42,6 +42,16 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.RecipesButtonText}>Visa recept</Text>
       </Pressable>
 
+      <Pressable
+        style={({ pressed }) => [
+          styles.RecipesButton,
+          pressed && styles.buttonPressed,
+        ]}
+        onPress={() => navigation.navigate("AddRecipe")}
+      >
+        <Text style={styles.RecipesButtonText}>Lägg till recept</Text>
+      </Pressable>
+
     </View>
   );
 }
@@ -49,7 +59,7 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colours.mint,
+    backgroundColor: colours.vin,
     justifyContent: "center",
     alignItems: "center",
     padding: 24,
@@ -57,11 +67,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 56,
     fontFamily: fonts.title,
-    color: colours.bark,
+    color: colours.guld,
     marginBottom: 48,
   },
   loginButton: {
-    backgroundColor: colours.sage,
+    backgroundColor: colours.terrakotta,
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 12,
@@ -69,7 +79,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonPressed: {
-    color: colours.mint,
+    color: colours.vin,
     opacity: 0.75,
   },
   loginButtonText: {
@@ -79,7 +89,7 @@ const styles = StyleSheet.create({
   },
 
   registerButton: {
-    backgroundColor: colours.grass,
+    backgroundColor: colours.beige,
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 12,
@@ -88,12 +98,12 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   registerButtonText: {
-    color: colours.bark,
+    color: colours.skog,
     fontSize: 18,
     fontWeight: "600",
   },
   RecipesButton: {
-    backgroundColor: colours.camel,
+    backgroundColor: colours.pergament,
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 12,
@@ -102,7 +112,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   RecipesButtonText: {
-    color: colours.bark,
+    color: colours.skog,
     fontSize: 18,
     fontWeight: "600",
   },

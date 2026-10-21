@@ -1,7 +1,8 @@
 export const colours = {
-  mint: "#E9F5DF",
-  sage: "#7CA16E",
-  grass: "#B3B635",
-  camel: "#DCBB8E",
-  bark: "#392713",
+  vin: "#741F2B",
+  skog: "#263D35",
+  terrakotta: "#B66B4B",
+  guld: "#C5A46D",
+  beige: "#E8D8B8",
+  pergament: "#F4EBDD",
 }

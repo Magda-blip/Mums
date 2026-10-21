@@ -9,6 +9,7 @@ import RegisterScreen from "./screens/RegisterScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RecipesScreen from "./screens/RecipesScreen";
 import RecipeDetailScreen from "./screens/RecipeDetailScreen";
+import AddRecipeScreen from "./screens/AddRecipeScreen";
 
 
 
@@ -53,6 +54,10 @@ export default function App() {
         <Stack.Screen
           name="RecipeDetail"
           component={RecipeDetailScreen}
+        />
+        <Stack.Screen
+          name="AddRecipe"
+          component={AddRecipeScreen}
         />
 
       </Stack.Navigator>
