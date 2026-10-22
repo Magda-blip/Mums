@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import {
   View,
@@ -9,6 +9,9 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
+
+import { useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { colours } from "../constants/Colours.js";
 import { fonts } from "../constants/Fonts.js";
@@ -33,36 +36,54 @@ export default function RecipesScreen({ navigation }) {
     });
   }
 
-  useEffect(() => {
-    async function fetchRecipes() {
-      try {
-        const { data, error } = await supabase
-          .from("recipes")
-          .select("*")
-          .order("id");
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
 
-        if (error) {
-          throw error;
+      async function fetchRecipes() {
+        setLoading(true);
+        setError(null);
+
+        try {
+          const { data, error } = await supabase
+            .from("recipes")
+            .select("*")
+            .order("id");
+
+          if (error) {
+            throw error;
+          }
+
+          const formattedRecipes = data.map((recipe) => ({
+            ...recipe,
+            cookingTime: recipe.cooking_time,
+          }));
+
+          if (isActive) {
+            setRecipes(formattedRecipes);
+          }
+        } catch (error) {
+          console.log("Fel vid hämtning av recept:", error);
+          console.log("Felmeddelande:", error.message);
+          console.log("Felkod:", error.code);
+
+          if (isActive) {
+            setError("Kunde inte hämta recepten från Supabase.");
+          }
+        } finally {
+          if (isActive) {
+            setLoading(false);
+          }
         }
-
-        const formattedRecipes = data.map((recipe) => ({
-          ...recipe,
-          cookingTime: recipe.cooking_time,
-        }));
-
-        setRecipes(formattedRecipes);
-      } catch (error) {
-        console.log("Fel vid hämtning av recept:", error);
-        console.log("Felmeddelande:", error.message);
-        console.log("Felkod:", error.code);
-        setError("Kunde inte hämta recepten från Supabase.");
-      } finally {
-        setLoading(false);
       }
-    }
 
-    fetchRecipes();
-  }, []);
+      fetchRecipes();
+
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
 
   if (loading) {

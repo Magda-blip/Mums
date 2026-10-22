@@ -7,8 +7,11 @@ import {
   StyleSheet,
   Pressable,
   ActivityIndicator,
+  Alert
 } from "react-native";
 
+import React from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { supabase } from "../lib/supabase";
 
 import { colours } from "../constants/Colours.js";
@@ -22,43 +25,59 @@ export default function RecipeDetailScreen({ route, navigation }) {
   const [error, setError] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  useEffect(() => {
-    async function fetchRecipe() {
-      try {
-        const { data, error } = await supabase
-          .from("recipes")
-          .select("*")
-          .eq("id", recipeId)
-          .single();
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
 
-        if (error) {
-          throw error;
+      async function fetchRecipe() {
+        try {
+          const { data, error } = await supabase
+            .from("recipes")
+            .select("*")
+            .eq("id", recipeId)
+            .single();
 
+          if (error) {
+            throw error;
+          }
 
+          const formattedRecipe = {
+            ...data,
+            cookingTime: data.cooking_time,
+            ingredients: data.ingredients
+              ? data.ingredients.split(",").map((ingredient) => ingredient.trim())
+              : [],
+          };
+
+          if (isActive) {
+            setRecipe(formattedRecipe);
+            setError(false);
+          }
+        } catch (error) {
+          console.log("Fel vid hämtning av recept:", error);
+
+          if (isActive) {
+            setError(true);
+          }
+        } finally {
+          if (isActive) {
+            setLoading(false);
+          }
         }
-
-
-
-        const formattedRecipe = {
-          ...data,
-          cookingTime: data.cooking_time,
-          ingredients: data.ingredients
-            ? data.ingredients.split(",").map((ingredient) => ingredient.trim())
-            : [],
-        };
-
-        setRecipe(formattedRecipe);
-      } catch (error) {
-        console.log("Fel vid hämtning av recept:", error);
-        setError(true);
-      } finally {
-        setLoading(false);
       }
-    }
 
-    fetchRecipe();
-  }, [recipeId]);
+      fetchRecipe();
+
+      return () => {
+        isActive = false;
+      };
+    }, [recipeId])
+  );
+
+
   useEffect(() => {
+
+
     async function fetchUser() {
       const { data: { user } } = await supabase.auth.getUser();
 
@@ -96,6 +115,60 @@ export default function RecipeDetailScreen({ route, navigation }) {
       </View>
     );
   }
+
+  async function deleteRecipe() {
+    Alert.alert(
+      "Ta bort recept",
+      "Är du säker på att du vill ta bort receptet?",
+      [
+        {
+          text: "Avbryt",
+          style: "cancel",
+        },
+        {
+          text: "Ta bort",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const { data: { user }, error: userError } =
+                await supabase.auth.getUser();
+
+              if (userError || !user) {
+                Alert.alert("Du måste logga in", "Logga in för att ta bort recept.");
+                return;
+              }
+
+              const { data, error } = await supabase
+                .from("recipes")
+                .delete()
+                .eq("id", recipe.id)
+                .eq("user_id", user.id)
+                .select();
+
+              if (error) {
+                throw error;
+              }
+
+              if (!data || data.length === 0) {
+                Alert.alert(
+                  "Kunde inte ta bort",
+                  "Du äger inte receptet eller så tillåter inte databasen borttagningen."
+                );
+                return;
+              }
+
+              Alert.alert("Recept borttaget", "Receptet har tagits bort.");
+              navigation.goBack();
+            } catch (error) {
+              console.log("Fel vid borttagning av recept:", error);
+              Alert.alert("Kunde inte ta bort", "Något gick fel när receptet skulle tas bort.");
+            }
+          },
+        },
+      ]
+    );
+  }
+
 
   return (
     <View style={styles.screen}>
@@ -138,9 +211,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
 
             <Pressable
               style={styles.actionButton}
-              onPress={() => {
-                // Ta bort recept kommer vi att koppla här
-              }}
+              onPress={deleteRecipe}
             >
               <Text style={styles.actionButtonText}>Ta bort recept</Text>
             </Pressable>
