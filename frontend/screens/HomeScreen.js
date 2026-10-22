@@ -1,36 +1,54 @@
 
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
+
 import { colours } from "../constants/Colours.js";
 import { fonts } from "../constants/Fonts.js";
 
-export default function HomeScreen({ navigation }) {
+import { supabase } from "../lib/supabase";
+
+export default function HomeScreen({ navigation, session }) {
+
+  async function handleLogout() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      Alert.alert("Kunde inte logga ut", error.message);
+    }
+  }
 
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Mums</Text>
 
-      <Pressable
-        style={({ pressed }) => [
-          styles.loginButton,
-          pressed && styles.loginButtonPressed,
-        ]}
-        onPress={() => navigation.navigate("Login")}
-      >
-        <Text style={styles.loginButtonText}>Logga in</Text>
-      </Pressable>
 
 
 
-      <Pressable
-        style={({ pressed }) => [
-          styles.registerButton,
-          pressed && styles.buttonPressed,
-        ]}
-        onPress={() => navigation.navigate("Register")}
-      >
-        <Text style={styles.registerButtonText}>Skapa konto</Text>
-      </Pressable>
+      {!session && (
+        <>
+
+          {<Pressable
+            style={({ pressed }) => [
+              styles.loginButton,
+              pressed && styles.loginButtonPressed,
+            ]}
+            onPress={() => navigation.navigate("Login")}
+          >
+            <Text style={styles.loginButtonText}>Logga in</Text>
+          </Pressable>}
+
+          {<Pressable
+            style={({ pressed }) => [
+              styles.registerButton,
+              pressed && styles.buttonPressed,
+            ]}
+            onPress={() => navigation.navigate("Register")}
+          >
+            <Text style={styles.registerButtonText}>Skapa konto</Text>
+          </Pressable>}
+
+        </>
+      )}
 
       <Pressable
         style={({ pressed }) => [
@@ -42,16 +60,29 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.RecipesButtonText}>Visa recept</Text>
       </Pressable>
 
-      <Pressable
-        style={({ pressed }) => [
-          styles.RecipesButton,
-          pressed && styles.buttonPressed,
-        ]}
-        onPress={() => navigation.navigate("AddRecipe")}
-      >
-        <Text style={styles.RecipesButtonText}>Lägg till recept</Text>
-      </Pressable>
 
+      {session && (
+
+        <>
+          <Pressable
+            style={({ pressed }) => [
+              styles.RecipesButton,
+              pressed && styles.buttonPressed,
+            ]}
+            onPress={() => navigation.navigate("AddRecipe")}
+          >
+            <Text style={styles.RecipesButtonText}>Lägg till recept</Text>
+          </Pressable>
+
+          <Pressable
+            style={styles.RecipesButton}
+            onPress={handleLogout}
+          >
+            <Text style={styles.RecipesButtonText}>Logga ut</Text>
+          </Pressable>
+        </>
+
+      )}
     </View>
   );
 }

@@ -10,12 +10,34 @@ import LoginScreen from "./screens/LoginScreen";
 import RecipesScreen from "./screens/RecipesScreen";
 import RecipeDetailScreen from "./screens/RecipeDetailScreen";
 import AddRecipeScreen from "./screens/AddRecipeScreen";
+import EditRecipeScreen from "./screens/EditRecipeScreen";
+
+import { useEffect, useState } from "react";
+import { supabase } from "./lib/supabase";
 
 
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+
   const [fontsLoaded] = useFonts({
     [fonts.title]: require("./assets/fonts/IndieFlower-Regular.ttf"),
   });
@@ -37,7 +59,11 @@ export default function App() {
 
         <Stack.Screen
           name="Home"
-          component={HomeScreen} />
+        >
+          {(props) => (
+            <HomeScreen {...props} session={session} />
+          )}
+        </Stack.Screen>
 
         <Stack.Screen
           name="Register"
@@ -59,7 +85,10 @@ export default function App() {
           name="AddRecipe"
           component={AddRecipeScreen}
         />
-
+        <Stack.Screen
+          name="EditRecipe"
+          component={EditRecipeScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

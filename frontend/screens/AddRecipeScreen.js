@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   Pressable,
 } from "react-native";
 
+import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 
 export default function AddRecipeScreen({ navigation }) {
@@ -19,13 +20,40 @@ export default function AddRecipeScreen({ navigation }) {
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
   const [saving, setSaving] = useState(false);
+  const [isPublic, setIsPublic] = useState(false);
+
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    async function checkLogin() {
+      const { data } = await supabase.auth.getSession();
+
+      if (!data.session) {
+        Alert.alert(
+          "Du måste logga in",
+          "Logga in för att lägga till recept."
+        );
+        navigation.replace("Home");
+      }
+
+      setCheckingAuth(false);
+    }
+
+    checkLogin();
+  }, []);
 
   async function saveRecipe() {
     if (!name.trim()) {
       Alert.alert("Saknar namn", "Du måste ange ett receptnamn.");
       return;
     }
+    const { data: { user }, error: userError } =
+      await supabase.auth.getUser();
 
+    if (userError || !user) {
+      Alert.alert("Du måste logga in", "Logga in för att spara recept.");
+      return;
+    }
     setSaving(true);
 
     try {
@@ -39,6 +67,8 @@ export default function AddRecipeScreen({ navigation }) {
             : null,
           ingredients: ingredients.trim(),
           instructions: instructions.trim(),
+          user_id: user.id,
+          is_public: isPublic,
         });
 
       if (error) {
@@ -63,6 +93,9 @@ export default function AddRecipeScreen({ navigation }) {
     }
   }
 
+  if (checkingAuth) {
+    return null;
+  }
   return (
     <ScrollView style={styles.container}>
 
@@ -112,7 +145,19 @@ export default function AddRecipeScreen({ navigation }) {
         placeholder="Beskriv hur receptet tillagas"
         multiline
       />
+      <Text style={styles.label}>Vem ska kunna se receptet?</Text>
 
+      <Pressable onPress={() => setIsPublic(false)}>
+        <Text>
+          {isPublic === false ? "🔘" : "⚪"} Bara jag
+        </Text>
+      </Pressable>
+
+      <Pressable onPress={() => setIsPublic(true)}>
+        <Text>
+          {isPublic === true ? "🔘" : "⚪"} Alla användare
+        </Text>
+      </Pressable>
       <Button
         title={saving ? "Sparar..." : "Spara recept"}
         onPress={saveRecipe}

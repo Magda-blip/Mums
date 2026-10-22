@@ -20,6 +20,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     async function fetchRecipe() {
@@ -32,7 +33,11 @@ export default function RecipeDetailScreen({ route, navigation }) {
 
         if (error) {
           throw error;
+
+
         }
+
+
 
         const formattedRecipe = {
           ...data,
@@ -53,7 +58,19 @@ export default function RecipeDetailScreen({ route, navigation }) {
 
     fetchRecipe();
   }, [recipeId]);
+  useEffect(() => {
+    async function fetchUser() {
+      const { data: { user } } = await supabase.auth.getUser();
 
+      setUserId(user?.id ?? null);
+    }
+
+    fetchUser();
+  }, []);
+
+  const isOwner = Boolean(
+    userId && recipe?.user_id && recipe.user_id === userId
+  );
   if (loading) {
     return (
       <View style={styles.container}>
@@ -107,6 +124,28 @@ export default function RecipeDetailScreen({ route, navigation }) {
         <Text style={styles.instructions}>
           {recipe.instructions}
         </Text>
+
+        {isOwner && (
+          <>
+            <Pressable
+              style={styles.actionButton}
+              onPress={() => navigation.navigate("EditRecipe", {
+                recipeId: recipe.id,
+              })}
+            >
+              <Text style={styles.actionButtonText}>Ändra recept</Text>
+            </Pressable>
+
+            <Pressable
+              style={styles.actionButton}
+              onPress={() => {
+                // Ta bort recept kommer vi att koppla här
+              }}
+            >
+              <Text style={styles.actionButtonText}>Ta bort recept</Text>
+            </Pressable>
+          </>
+        )}
 
       </ScrollView>
 
@@ -177,6 +216,19 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: colours.bark,
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  actionButton: {
+    backgroundColor: colours.terrakotta,
+    padding: 14,
+    borderRadius: 12,
+    alignItems: "center",
+    marginTop: 12,
+  },
+
+  actionButtonText: {
+    color: colours.pergament,
     fontSize: 18,
     fontWeight: "600",
   },
