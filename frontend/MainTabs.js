@@ -14,22 +14,28 @@ const Tab = createBottomTabNavigator();
 export default function MainTabs({ session }) {
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
         headerShown: false,
+
         tabBarActiveTintColor: colours.skog,
         tabBarInactiveTintColor: colours.bark,
+
         tabBarStyle: {
           backgroundColor: colours.pergament,
           borderTopColor: colours.sage,
           height: 65,
           paddingTop: 6,
           paddingBottom: 8,
+
+          // Dölj tab baren på hemskärmen
+          display: route.name === "HomeTab" ? "none" : "flex",
         },
+
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "600",
         },
-      }}
+      })}
     >
 
       <Tab.Screen
