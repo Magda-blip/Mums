@@ -7,7 +7,8 @@ import {
   StyleSheet,
   Pressable,
   ActivityIndicator,
-  Alert
+  Alert,
+  Share
 } from "react-native";
 
 import React from "react";
@@ -90,6 +91,18 @@ export default function RecipeDetailScreen({ route, navigation }) {
   const isOwner = Boolean(
     userId && recipe?.user_id && recipe.user_id === userId
   );
+
+  async function shareRecipe() {
+    try {
+      await Share.share({
+        title: recipe.name,
+        message: `Kolla in receptet ${recipe.name}!\n\n${recipe.description}`,
+      });
+    } catch (error) {
+      Alert.alert("Kunde inte dela receptet");
+    }
+  }
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -175,6 +188,15 @@ export default function RecipeDetailScreen({ route, navigation }) {
 
       <ScrollView style={styles.container}>
         <Text style={styles.title}>{recipe.name}</Text>
+
+        <Pressable
+          style={styles.shareButton}
+          onPress={shareRecipe}
+        >
+          <Text style={styles.shareButtonText}>
+            Dela recept
+          </Text>
+        </Pressable>
 
         <Text style={styles.description}>
           {recipe.description}
@@ -301,6 +323,19 @@ const styles = StyleSheet.create({
   actionButtonText: {
     color: colours.pergament,
     fontSize: 18,
+    fontWeight: "600",
+  },
+  shareButton: {
+    backgroundColor: colours.sage,
+    padding: 12,
+    borderRadius: 12,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  shareButtonText: {
+    color: colours.bark,
+    fontSize: 16,
     fontWeight: "600",
   },
 });

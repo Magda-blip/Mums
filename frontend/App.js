@@ -3,17 +3,19 @@ import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import HomeScreen from "./screens/HomeScreen";
+
 import { fonts } from "./constants/Fonts";
 import RegisterScreen from "./screens/RegisterScreen";
 import LoginScreen from "./screens/LoginScreen";
-import RecipesScreen from "./screens/RecipesScreen";
+
 import RecipeDetailScreen from "./screens/RecipeDetailScreen";
 import AddRecipeScreen from "./screens/AddRecipeScreen";
 import EditRecipeScreen from "./screens/EditRecipeScreen";
+import MainTabs from "./MainTabs";
 
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
+
 
 
 
@@ -51,17 +53,14 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="MainTabs"
         screenOptions={{
           headerShown: false,
         }}
       >
-
-        <Stack.Screen
-          name="Home"
-        >
+        <Stack.Screen name="MainTabs">
           {(props) => (
-            <HomeScreen {...props} session={session} />
+            <MainTabs {...props} session={session} />
           )}
         </Stack.Screen>
 
@@ -73,10 +72,7 @@ export default function App() {
           name="Login"
           component={LoginScreen}
         />
-        <Stack.Screen
-          name="Recipes"
-          component={RecipesScreen}
-        />
+
         <Stack.Screen
           name="RecipeDetail"
           component={RecipeDetailScreen}

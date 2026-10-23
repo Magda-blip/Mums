@@ -15,8 +15,11 @@ import { useFocusEffect } from "@react-navigation/native";
 
 import { colours } from "../constants/Colours.js";
 import { fonts } from "../constants/Fonts.js";
+import { commonStyles } from "../constants/CommonStyles";
 
 import { supabase } from "../lib/supabase";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ScreenBackground from "../components/ScreenBackground";
 
 
 export default function RecipesScreen({ navigation }) {
@@ -88,8 +91,8 @@ export default function RecipesScreen({ navigation }) {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color={colours.bark} />
+      <View style={commonStyles.container}>
+        <ActivityIndicator size="large" color={colours.pergament} />
         <Text style={styles.description}>Hämtar recept...</Text>
       </View>
     );
@@ -97,7 +100,7 @@ export default function RecipesScreen({ navigation }) {
 
   if (error) {
     return (
-      <View style={styles.container}>
+      <View style={commonStyles.container}>
         <Text style={styles.description}>{error}</Text>
         <Pressable onPress={() => navigation.goBack()}>
           <Text style={styles.description}>Tillbaka</Text>
@@ -107,63 +110,72 @@ export default function RecipesScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Recept</Text>
 
-      <FlatList
-        data={recipes}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <Pressable
-            style={styles.recipeCard}
-            onPress={() =>
-              navigation.navigate("RecipeDetail", {
-                recipeId: item.id,
-              })
-            }
-          >
-            <View style={styles.recipeHeader}>
-              <Text style={styles.recipeName}>{item.name}</Text>
+    <ScreenBackground>
 
-              <Pressable
-                onPress={(event) => {
-                  event.stopPropagation();
-                  toggleFavorite(item.id);
-                }}
-                hitSlop={10}
-              >
-                <Text style={styles.heart}>
-                  {favorites.includes(item.id) ? "♥" : "♡"}
-                </Text>
-              </Pressable>
-            </View>
+      <SafeAreaView style={{ flex: 1 }}>
 
-            <Text style={styles.description}>
-              {item.description}
-            </Text>
+        <View style={commonStyles.titleTextBox}>
+          <Text style={commonStyles.title}>Recept</Text>
+        </View>
 
-            <Text style={styles.time}>
-              Tillagningstid: {item.cookingTime} minuter
-            </Text>
+        <FlatList
+          style={{ flex: 1 }}
+          data={recipes}
+          keyExtractor={(item) => String(item.id)}
+          renderItem={({ item }) => (
+            <Pressable
+              style={commonStyles.card}
+              onPress={() =>
+                navigation.navigate("RecipeDetail", {
+                  recipeId: item.id,
+                })
+              }
+            >
+              <View style={styles.recipeHeader}>
+                <Text style={styles.recipeName}>{item.name}</Text>
+
+                <Pressable
+                  onPress={(event) => {
+                    event.stopPropagation();
+                    toggleFavorite(item.id);
+                  }}
+                  hitSlop={10}
+                >
+                  <Text style={styles.heart}>
+                    {favorites.includes(item.id) ? "♥" : "♡"}
+                  </Text>
+                </Pressable>
+              </View>
+
+              <Text style={styles.description}>
+                {item.description}
+              </Text>
+
+              <Text style={styles.time}>
+                Tillagningstid: {item.cookingTime} minuter
+              </Text>
 
 
 
-          </Pressable>
+            </Pressable>
 
 
 
-        )}
+          )}
 
-      />
+        />
 
-      <Pressable
-        style={styles.backButton}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={styles.backButtonText}>Tillbaka</Text>
-      </Pressable>
+        <Pressable
+          style={commonStyles.button}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={commonStyles.buttonText}>Tillbaka</Text>
+        </Pressable>
 
-    </View>
+      </SafeAreaView>
+    </ScreenBackground>
+
   );
 }
 
@@ -190,17 +202,17 @@ const styles = StyleSheet.create({
   recipeName: {
     fontSize: 22,
     fontWeight: "600",
-    color: colours.bark,
+    color: colours.pergament,
     marginBottom: 8,
   },
   description: {
     fontSize: 16,
-    color: colours.bark,
+    color: colours.pergament,
     marginBottom: 10,
   },
   time: {
     fontSize: 14,
-    color: colours.bark,
+    color: colours.pergament,
   },
   backButton: {
     alignItems: "center",
@@ -215,6 +227,6 @@ const styles = StyleSheet.create({
 
   heart: {
     fontSize: 30,
-    color: colours.bark,
+    color: colours.pergament,
   },
 });

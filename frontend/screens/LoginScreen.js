@@ -16,6 +16,8 @@ import { Alert } from "react-native";
 
 import { colours } from "../constants/Colours.js";
 import { fonts } from "../constants/Fonts.js";
+import { commonStyles } from "../constants/CommonStyles.js";
+import ScreenBackground from "../components/ScreenBackground.js";
 
 export default function LoginScreen({ navigation }) {
 
@@ -38,56 +40,59 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Välkommen tillbaka!</Text>
 
-        <Text style={styles.description}>
-          Logga in för att komma åt dina recept.
-        </Text>
+    <ScreenBackground>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView contentContainerStyle={styles.content}>
+          <Text style={commonStyles.title}>Välkommen tillbaka!</Text>
 
-        <View style={styles.form}>
-          <Text style={styles.label}>E-post</Text>
+          <Text style={commonStyles.subtitle}>
+            Logga in för att komma åt dina recept.
+          </Text>
 
-          <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-            placeholder="din@email.se"
-            placeholderTextColor={colours.darkBrown}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
+          <View style={styles.form}>
+            <Text style={commonStyles.label}>E-post</Text>
 
-          <Text style={styles.label}>Lösenord</Text>
-          <TextInput
-            style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Ditt lösenord"
-            placeholderTextColor={colours.darkBrown}
-            secureTextEntry
-          />
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="din@email.se"
+              placeholderTextColor={colours.darkBrown}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
 
-          <Pressable
-            style={styles.button}
-            onPress={handleLogin}
-          >
-            <Text style={styles.buttonText}>Logga in</Text>
-          </Pressable>
+            <Text style={commonStyles.label}>Lösenord</Text>
+            <TextInput
+              style={styles.input}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Ditt lösenord"
+              placeholderTextColor={colours.darkBrown}
+              secureTextEntry
+            />
 
-          <Pressable
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.backButtonText}>Tillbaka</Text>
-          </Pressable>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+            <Pressable
+              style={commonStyles.button}
+              onPress={handleLogin}
+            >
+              <Text style={commonStyles.buttonText}>Logga in</Text>
+            </Pressable>
+
+            <Pressable
+              style={commonStyles.button}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={commonStyles.buttonText}>Tillbaka</Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ScreenBackground>
   );
 }
 

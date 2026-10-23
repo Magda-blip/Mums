@@ -14,6 +14,7 @@ import { supabase } from "../lib/supabase";
 
 
 import BG from "../assets/images/background_mums.png";
+import { commonStyles } from "../constants/CommonStyles.js";
 
 export default function HomeScreen({ navigation, session }) {
   async function handleLogout() {
@@ -30,62 +31,62 @@ export default function HomeScreen({ navigation, session }) {
       resizeMode="cover"
       style={styles.container}
     >
-      <View style={styles.textBox}>
 
-        <Text style={styles.subtitle}>
-          Recept-appen
-        </Text>
-        <Text style={styles.title}>Mums</Text>
 
-        <Text style={styles.subtitle}>
-          För att du älskar mat
-        </Text>
-      </View>
+      <Text style={commonStyles.subtitle}>
+        Bli tjock med
+      </Text>
+      <Text style={commonStyles.title}>Mums</Text>
+
+      {/*<Text style={commonStyles.subtitle}>
+        För att du älskar mat
+      </Text>*/}
+
 
       {!session && (
         <>
           <Pressable
             style={({ pressed }) => [
-              styles.loginButton,
+              commonStyles.button,
               pressed && styles.buttonPressed,
             ]}
             onPress={() => navigation.navigate("Login")}
           >
-            <Text style={styles.buttonText}>Logga in</Text>
+            <Text style={commonStyles.buttonText}>Logga in</Text>
           </Pressable>
 
           <Pressable
             style={({ pressed }) => [
-              styles.registerButton,
+              commonStyles.button,
               pressed && styles.buttonPressed,
             ]}
             onPress={() => navigation.navigate("Register")}
           >
-            <Text style={styles.buttonText}>Skapa konto</Text>
+            <Text style={commonStyles.buttonText}>Skapa konto</Text>
           </Pressable>
         </>
       )}
 
       <Pressable
         style={({ pressed }) => [
-          styles.recipesButton,
+          commonStyles.button,
           pressed && styles.buttonPressed,
         ]}
         onPress={() => navigation.navigate("Recipes")}
       >
-        <Text style={styles.buttonText}>Visa recept</Text>
+        <Text style={commonStyles.buttonText}>Visa recept</Text>
       </Pressable>
 
       {session && (
         <>
           <Pressable
             style={({ pressed }) => [
-              styles.recipesButton,
+              commonStyles.button,
               pressed && styles.buttonPressed,
             ]}
             onPress={() => navigation.navigate("AddRecipe")}
           >
-            <Text style={styles.buttonText}>Lägg till recept</Text>
+            <Text style={commonStyles.buttonText}>Lägg till recept</Text>
           </Pressable>
 
           <Pressable
