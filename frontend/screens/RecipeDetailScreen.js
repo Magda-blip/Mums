@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import {
   View,
   Text,
@@ -17,10 +17,17 @@ import { supabase } from "../lib/supabase";
 
 import { colours } from "../constants/Colours.js";
 import { fonts } from "../constants/Fonts.js";
+import { FavoritesContext } from "../context/FavoritesContext";
 
-export default function RecipeDetailScreen({ route, navigation }) {
+export default function RecipeDetailScreen({
+  route,
+  navigation,
+  session,
+}) {
   const { recipeId } = route.params;
+  const { favorites, toggleFavorite } = useContext(FavoritesContext);
 
+  const isFavorite = favorites.includes(String(recipeId));
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -187,7 +194,28 @@ export default function RecipeDetailScreen({ route, navigation }) {
     <View style={styles.screen}>
 
       <ScrollView style={styles.container}>
-        <Text style={styles.title}>{recipe.name}</Text>
+        <View style={styles.recipeHeader}>
+          <Text style={styles.title}>{recipe.name}</Text>
+
+          <Pressable
+            hitSlop={10}
+            onPress={() => {
+              if (!session) {
+                Alert.alert(
+                  "Logga in",
+                  "Du behöver vara inloggad för att spara favoriter."
+                );
+                return;
+              }
+
+              toggleFavorite(String(recipe.id));
+            }}
+          >
+            <Text style={styles.heart}>
+              {isFavorite ? "♥" : "♡"}
+            </Text>
+          </Pressable>
+        </View>
 
         <Pressable
           style={styles.shareButton}
@@ -244,7 +272,13 @@ export default function RecipeDetailScreen({ route, navigation }) {
 
       <Pressable
         style={styles.backButton}
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          if (route.params?.fromFavorites) {
+            navigation.getParent()?.navigate("FavoritesTab");
+          } else {
+            navigation.goBack();
+          }
+        }}
       >
         <Text style={styles.backButtonText}>Tillbaka</Text>
       </Pressable>
@@ -337,5 +371,15 @@ const styles = StyleSheet.create({
     color: colours.bark,
     fontSize: 16,
     fontWeight: "600",
+  },
+  recipeHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
+  heart: {
+    fontSize: 32,
+    color: colours.skog,
   },
 });

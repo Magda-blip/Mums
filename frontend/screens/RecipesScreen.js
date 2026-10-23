@@ -8,11 +8,14 @@ import {
   Pressable,
   FlatList,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 
 import { useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import { useContext } from "react";
 
+import { FavoritesContext } from "../context/FavoritesContext";
 import { colours } from "../constants/Colours.js";
 import { fonts } from "../constants/Fonts.js";
 import { commonStyles } from "../constants/CommonStyles";
@@ -22,22 +25,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ScreenBackground from "../components/ScreenBackground";
 
 
-export default function RecipesScreen({ navigation }) {
+export default function RecipesScreen({ navigation, session }) {
 
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [favorites, setFavorites] = useState([]);
+  const { favorites, toggleFavorite } = useContext(FavoritesContext);
 
-  function toggleFavorite(recipeId) {
-    setFavorites((currentFavorites) => {
-      if (currentFavorites.includes(recipeId)) {
-        return currentFavorites.filter((id) => id !== recipeId);
-      }
 
-      return [...currentFavorites, recipeId];
-    });
-  }
 
   useFocusEffect(
     useCallback(() => {
@@ -138,12 +133,21 @@ export default function RecipesScreen({ navigation }) {
                 <Pressable
                   onPress={(event) => {
                     event.stopPropagation();
-                    toggleFavorite(item.id);
+
+                    if (!session) {
+                      Alert.alert(
+                        "Logga in",
+                        "Du behöver vara inloggad för att spara favoriter."
+                      );
+                      return;
+                    }
+
+                    toggleFavorite(String(item.id));
                   }}
                   hitSlop={10}
                 >
                   <Text style={styles.heart}>
-                    {favorites.includes(item.id) ? "♥" : "♡"}
+                    {favorites.includes(String(item.id)) ? "♥" : "♡"}
                   </Text>
                 </Pressable>
               </View>
@@ -155,8 +159,6 @@ export default function RecipesScreen({ navigation }) {
               <Text style={styles.time}>
                 Tillagningstid: {item.cookingTime} minuter
               </Text>
-
-
 
             </Pressable>
 

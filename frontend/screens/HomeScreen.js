@@ -72,7 +72,14 @@ export default function HomeScreen({ navigation, session }) {
           commonStyles.button,
           pressed && styles.buttonPressed,
         ]}
-        onPress={() => navigation.navigate("Recipes")}
+        onPress={() =>
+          navigation.navigate("MainTabs", {
+            screen: "RecipesTab",
+            params: {
+              screen: "Recipes",
+            },
+          })
+        }
       >
         <Text style={commonStyles.buttonText}>Visa recept</Text>
       </Pressable>
@@ -84,7 +91,14 @@ export default function HomeScreen({ navigation, session }) {
               commonStyles.button,
               pressed && styles.buttonPressed,
             ]}
-            onPress={() => navigation.navigate("AddRecipe")}
+            onPress={() =>
+              navigation.navigate("MainTabs", {
+                screen: "RecipesTab",
+                params: {
+                  screen: "AddRecipe",
+                },
+              })
+            }
           >
             <Text style={commonStyles.buttonText}>Lägg till recept</Text>
           </Pressable>

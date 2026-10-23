@@ -2,25 +2,21 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
-
-import HomeScreen from "./screens/HomeScreen";
-import RecipesScreen from "./screens/RecipesScreen";
-
+import HomeScreen from "./screens/HomeScreen.js";
+import RecipeStack from "./RecipeStack";
+import FavoritesScreen from "./screens/FavoritesScreen.js";
+import LoginScreen from "./screens/LoginScreen";
 import { colours } from "./constants/Colours.js";
 
 const Tab = createBottomTabNavigator();
-
-
 
 export default function MainTabs({ session }) {
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-
         tabBarActiveTintColor: colours.skog,
         tabBarInactiveTintColor: colours.bark,
-
         tabBarStyle: {
           backgroundColor: colours.pergament,
           borderTopColor: colours.sage,
@@ -28,15 +24,15 @@ export default function MainTabs({ session }) {
           paddingTop: 6,
           paddingBottom: 8,
         },
-
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "600",
         },
       }}
     >
+
       <Tab.Screen
-        name="Hem"
+        name="HomeTab"
         options={{
           tabBarLabel: "Hem",
           tabBarIcon: ({ color, size, focused }) => (
@@ -45,7 +41,7 @@ export default function MainTabs({ session }) {
               size={size}
               color={color}
             />
-          )
+          ),
         }}
       >
         {(props) => (
@@ -56,11 +52,8 @@ export default function MainTabs({ session }) {
         )}
       </Tab.Screen>
 
-
-
       <Tab.Screen
-        name="Recipes"
-        component={RecipesScreen}
+        name="RecipesTab"
         options={{
           tabBarLabel: "Recept",
           tabBarIcon: ({ color, size, focused }) => (
@@ -71,8 +64,53 @@ export default function MainTabs({ session }) {
             />
           )
         }}
-      />
+      >
+        {(props) => (
+          <RecipeStack
+            {...props}
+            session={session}
+          />
+        )}
+      </Tab.Screen>
 
+      {session ? (
+        <Tab.Screen
+          name="FavoritesTab"
+          options={{
+            tabBarLabel: "Favoriter",
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons
+                name={focused ? "heart" : "heart-outline"}
+                size={size}
+                color={color}
+              />
+            )
+          }}
+        >
+          {(props) => (
+            <FavoritesScreen
+              {...props}
+              session={session}
+            />
+          )}
+        </Tab.Screen>
+      ) : (
+        <Tab.Screen
+          name="LoginTab"
+          options={{
+            tabBarLabel: "Logga in",
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons
+                name={focused ? "log-in" : "log-in-outline"}
+                size={size}
+                color={color}
+              />
+            )
+          }}
+        >
+          {(props) => <LoginScreen {...props} />}
+        </Tab.Screen>
+      )}
     </Tab.Navigator>
   );
 }
