@@ -135,6 +135,8 @@ export default function EditRecipeScreen({ route, navigation }) {
         style={styles.input}
         value={name}
         onChangeText={setName}
+        accessibilityLabel="Receptets namn"
+        accessibilityHint="Ändra receptets namn"
       />
 
       <Text style={styles.label}>Beskrivning</Text>
@@ -143,6 +145,8 @@ export default function EditRecipeScreen({ route, navigation }) {
         value={description}
         onChangeText={setDescription}
         multiline
+        accessibilityLabel="Receptets beskrivning"
+        accessibilityHint="Ändra receptets beskrivning"
       />
 
       <Text style={styles.label}>Tillagningstid (minuter)</Text>
@@ -151,6 +155,8 @@ export default function EditRecipeScreen({ route, navigation }) {
         value={cookingTime}
         onChangeText={setCookingTime}
         keyboardType="numeric"
+        accessibilityLabel="Receptets tillagningstid"
+        accessibilityHint="Ändra receptets tillagningstid"
       />
 
       <Text style={styles.label}>Ingredienser</Text>
@@ -159,6 +165,8 @@ export default function EditRecipeScreen({ route, navigation }) {
         value={ingredients}
         onChangeText={setIngredients}
         multiline
+        accessibilityLabel="Receptets ingredienser"
+        accessibilityHint="Ändra receptets ingredienser"
       />
 
       <Text style={styles.label}>Gör så här</Text>
@@ -167,17 +175,27 @@ export default function EditRecipeScreen({ route, navigation }) {
         value={instructions}
         onChangeText={setInstructions}
         multiline
+        accessibilityLabel="Receptets tillagning"
+        accessibilityHint="Ändra receptets tillagningsinstruktioner"
       />
 
       <Text style={styles.label}>Vem ska kunna se receptet?</Text>
 
-      <Pressable onPress={() => setIsPublic(false)}>
+      <Pressable
+        accessibilityRole="radio"
+        accessibilityLabel="Bara jag"
+        accessibilityState={{ selected: isPublic === false }}
+        onPress={() => setIsPublic(false)}>
         <Text style={styles.option}>
           {isPublic ? "⚪" : "🔘"} Bara jag
         </Text>
       </Pressable>
 
-      <Pressable onPress={() => setIsPublic(true)}>
+      <Pressable
+        accessibilityRole="radio"
+        accessibilityLabel="Alla användare"
+        accessibilityState={{ selected: isPublic === true }}
+        onPress={() => setIsPublic(true)}>
         <Text style={styles.option}>
           {isPublic ? "🔘" : "⚪"} Alla användare
         </Text>
@@ -185,6 +203,10 @@ export default function EditRecipeScreen({ route, navigation }) {
 
       <Pressable
         style={styles.button}
+        accessibilityRole="button"
+        accessibilityLabel={
+          saving ? "Sparar ändringar" : "Spara ändringar"
+        }
         onPress={saveChanges}
         disabled={saving}
       >
@@ -194,6 +216,8 @@ export default function EditRecipeScreen({ route, navigation }) {
       </Pressable>
       <Pressable
         style={styles.button}
+        accessibilityRole="button"
+        accessibilityLabel="Tillbaka"
         onPress={() => navigation.goBack()}
       >
         <Text style={styles.buttonText}>Tillbaka</Text>

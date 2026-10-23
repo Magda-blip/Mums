@@ -7,15 +7,72 @@ import {
   Platform,
   ScrollView,
   TextInput,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
 
-
+import { supabase } from "../lib/supabase";
 import { colours } from "../constants/Colours.js";
 import { fonts } from "../constants/Fonts.js";
 
 
 export default function RegisterScreen({ navigation }) {
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleRegister() {
+    if (!name.trim() || !email.trim() || !password) {
+      Alert.alert(
+        "Fyll i alla fält",
+        "Du måste ange namn, e-post och lösenord."
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password: password,
+        options: {
+          data: {
+            full_name: name.trim(),
+          },
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data.session) {
+        Alert.alert(
+          "Konto skapat!",
+          "Du är nu registrerad och inloggad."
+        );
+        navigation.navigate("Home");
+      } else {
+        Alert.alert(
+          "Konto skapat!",
+          "Kontrollera din e-post för att bekräfta kontot innan du loggar in."
+        );
+        navigation.navigate("Login");
+      }
+    } catch (error) {
+      console.log("Fel vid registrering:", error);
+      Alert.alert(
+        "Kunde inte skapa konto",
+        error.message
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
@@ -38,41 +95,62 @@ export default function RegisterScreen({ navigation }) {
 
             <TextInput
               style={styles.input}
+              value={name}
+              onChangeText={setName}
               placeholder="Namn"
               placeholderTextColor={colours.bark}
               autoCapitalize="words"
+              accessibilityLabel="Namn"
+              accessibilityHint="Ange ditt namn"
             />
 
             <Text style={styles.label}>E-post</Text>
 
             <TextInput
               style={styles.input}
+              value={email}
+              onChangeText={setEmail}
               placeholder="E-post"
               placeholderTextColor={colours.bark}
               keyboardType="email-address"
               autoCapitalize="none"
+              accessibilityLabel="E-post"
+              accessibilityHint="Ange din e-postadress"
             />
 
             <Text style={styles.label}>Lösenord</Text>
 
             <TextInput
               style={styles.input}
+              value={password}
+              onChangeText={setPassword}
               placeholder="Lösenord"
               placeholderTextColor={colours.bark}
               secureTextEntry
+              accessibilityLabel="Lösenord"
+              accessibilityHint="Ange ett lösenord"
             />
 
 
             <Pressable
               style={styles.button}
-              onPress={() => console.log("Registrera")}
+              accessibilityRole="button"
+              accessibilityLabel={
+                loading ? "Skapar konto" : "Skapa konto"
+              }
+              onPress={handleRegister}
+              disabled={loading}
             >
-              <Text style={styles.buttonText}>Skapa konto</Text>
+              <Text style={styles.buttonText}>
+                {loading ? "Skapar konto..." : "Skapa konto"}
+              </Text>
             </Pressable>
 
 
             <Pressable
               style={styles.backButton}
+              accessibilityRole="button"
+              accessibilityLabel="Gå tillbaka"
               onPress={() => navigation.goBack()}
             >
               <Text style={styles.backButtonText}>Tillbaka</Text>

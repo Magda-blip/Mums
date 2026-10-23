@@ -109,6 +109,8 @@ export default function AddRecipeScreen({ navigation }) {
         value={name}
         onChangeText={setName}
         placeholder="Receptets namn"
+        accessibilityLabel="Receptets namn"
+        accessibilityHint="Ange receptets namn"
       />
 
       <Text style={styles.label}>Beskrivning</Text>
@@ -117,6 +119,8 @@ export default function AddRecipeScreen({ navigation }) {
         value={description}
         onChangeText={setDescription}
         placeholder="Kort beskrivning"
+        accessibilityLabel="Beskrivning"
+        accessibilityHint="Ange en kort beskrivning"
       />
 
       <Text style={styles.label}>Tillagningstid (minuter)</Text>
@@ -126,6 +130,8 @@ export default function AddRecipeScreen({ navigation }) {
         onChangeText={setCookingTime}
         placeholder="Exempel: 20"
         keyboardType="numeric"
+        accessibilityLabel="Tillagningstid"
+        accessibilityHint="Ange tillagningstid i minuter"
       />
 
       <Text style={styles.label}>Ingredienser</Text>
@@ -135,6 +141,8 @@ export default function AddRecipeScreen({ navigation }) {
         onChangeText={setIngredients}
         placeholder="Exempel: Pasta, tomater, olivolja"
         multiline
+        accessibilityLabel="Ingredienser"
+        accessibilityHint="Ange ingredienser"
       />
 
       <Text style={styles.label}>Instruktioner</Text>
@@ -144,27 +152,41 @@ export default function AddRecipeScreen({ navigation }) {
         onChangeText={setInstructions}
         placeholder="Beskriv hur receptet tillagas"
         multiline
+        accessibilityLabel="Gör så här"
+        accessibilityHint="Ange hur rätten tillagas"
       />
       <Text style={styles.label}>Vem ska kunna se receptet?</Text>
 
-      <Pressable onPress={() => setIsPublic(false)}>
+      <Pressable
+        accessibilityRole="radio"
+        accessibilityLabel="Bara jag"
+        accessibilityState={{ selected: isPublic === false }}
+        onPress={() => setIsPublic(false)}>
         <Text>
           {isPublic === false ? "🔘" : "⚪"} Bara jag
         </Text>
       </Pressable>
 
-      <Pressable onPress={() => setIsPublic(true)}>
+      <Pressable
+        accessibilityRole="radio"
+        accessibilityLabel="Alla användare"
+        accessibilityState={{ selected: isPublic === true }}
+        onPress={() => setIsPublic(true)}>
         <Text>
           {isPublic === true ? "🔘" : "⚪"} Alla användare
         </Text>
       </Pressable>
       <Button
         title={saving ? "Sparar..." : "Spara recept"}
+        accessibilityLabel={saving ? "Sparar recept" : "Spara recept"}
         onPress={saveRecipe}
         disabled={saving}
       />
 
-      <Pressable onPress={() => navigation.goBack()}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Tillbaka"
+        onPress={() => navigation.goBack()}>
         <Text>← Tillbaka</Text>
       </Pressable>
 

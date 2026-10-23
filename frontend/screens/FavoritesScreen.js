@@ -102,6 +102,8 @@ export default function FavoritesScreen({ navigation, session }) {
           renderItem={({ item }) => (
             <Pressable
               style={commonStyles.card}
+              accessibilityRole="button"
+              accessibilityLabel={`Visa receptet ${item.name}`}
               onPress={() =>
                 navigation.navigate("RecipesTab", {
                   screen: "RecipeDetail",
@@ -123,6 +125,16 @@ export default function FavoritesScreen({ navigation, session }) {
 
                 <Pressable
                   hitSlop={10}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    favorites.includes(String(item.id))
+                      ? `Ta bort ${item.name} från favoriter`
+                      : `Lägg till ${item.name} i favoriter`
+                  }
+                  accessibilityState={{
+                    selected: favorites.includes(String(item.id)),
+                  }}
+
                   onPress={(event) => {
                     event.stopPropagation();
 

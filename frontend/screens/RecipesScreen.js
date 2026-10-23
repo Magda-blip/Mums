@@ -131,6 +131,15 @@ export default function RecipesScreen({ navigation, session }) {
                 <Text style={styles.recipeName}>{item.name}</Text>
 
                 <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    favorites.includes(String(item.id))
+                      ? `Ta bort ${item.name} från favoriter`
+                      : `Lägg till ${item.name} i favoriter`
+                  }
+                  accessibilityState={{
+                    selected: favorites.includes(String(item.id))
+                  }}
                   onPress={(event) => {
                     event.stopPropagation();
 

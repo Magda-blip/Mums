@@ -2,6 +2,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
+import SearchScreen from "./screens/SearchScreen.js";
 import HomeScreen from "./screens/HomeScreen.js";
 import RecipeStack from "./RecipeStack";
 import FavoritesScreen from "./screens/FavoritesScreen.js";
@@ -72,6 +73,35 @@ export default function MainTabs({ session }) {
           />
         )}
       </Tab.Screen>
+
+
+      {session && (
+        <Tab.Screen
+          name="SearchTab"
+          options={{
+            tabBarLabel: "Sök",
+            tabBarIcon: ({ color, size, focused }) => (
+              <Ionicons
+                name={focused ? "search" : "search-outline"}
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        >
+          {(props) => (
+            <SearchScreen
+              {...props}
+              session={session}
+            />
+          )}
+        </Tab.Screen>
+      )}
+
+
+
+
+
 
       {session ? (
         <Tab.Screen

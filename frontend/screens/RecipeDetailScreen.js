@@ -199,6 +199,15 @@ export default function RecipeDetailScreen({
 
           <Pressable
             hitSlop={10}
+            accessibilityRole="button"
+            accessibilityLabel={
+              isFavorite
+                ? `Ta bort ${recipe.name} från favoriter`
+                : `Lägg till ${recipe.name} i favoriter`
+            }
+            accessibilityState={{
+              selected: isFavorite,
+            }}
             onPress={() => {
               if (!session) {
                 Alert.alert(
@@ -220,6 +229,9 @@ export default function RecipeDetailScreen({
         <Pressable
           style={styles.shareButton}
           onPress={shareRecipe}
+          accessibilityRole="button"
+          accessibilityLabel="Dela recept"
+          accessibilityHint="Öppnar alternativen för att dela receptet"
         >
           <Text style={styles.shareButtonText}>
             Dela recept
@@ -252,6 +264,8 @@ export default function RecipeDetailScreen({
           <>
             <Pressable
               style={styles.actionButton}
+              accessibilityRole="button"
+              accessibilityLabel="Tillbaka"
               onPress={() => navigation.navigate("EditRecipe", {
                 recipeId: recipe.id,
               })}
@@ -261,6 +275,8 @@ export default function RecipeDetailScreen({
 
             <Pressable
               style={styles.actionButton}
+              accessibilityRole="button"
+              accessibilityLabel="Tillbaka"
               onPress={deleteRecipe}
             >
               <Text style={styles.actionButtonText}>Ta bort recept</Text>
@@ -271,10 +287,13 @@ export default function RecipeDetailScreen({
       </ScrollView>
 
       <Pressable
-        style={styles.backButton}
+        accessibilityRole="button"
+        accessibilityLabel="Tillbaka"
         onPress={() => {
           if (route.params?.fromFavorites) {
             navigation.getParent()?.navigate("FavoritesTab");
+          } else if (route.params?.fromSearch) {
+            navigation.getParent()?.navigate("SearchTab");
           } else {
             navigation.goBack();
           }

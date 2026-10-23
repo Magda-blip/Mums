@@ -50,6 +50,8 @@ export default function HomeScreen({ navigation, session }) {
               commonStyles.button,
               pressed && styles.buttonPressed,
             ]}
+            accessibilityRole="button"
+            accessibilityLabel="Logga in"
             onPress={() => navigation.navigate("Login")}
           >
             <Text style={commonStyles.buttonText}>Logga in</Text>
@@ -60,6 +62,8 @@ export default function HomeScreen({ navigation, session }) {
               commonStyles.button,
               pressed && styles.buttonPressed,
             ]}
+            accessibilityRole="button"
+            accessibilityLabel="Skapa konto"
             onPress={() => navigation.navigate("Register")}
           >
             <Text style={commonStyles.buttonText}>Skapa konto</Text>
@@ -72,6 +76,8 @@ export default function HomeScreen({ navigation, session }) {
           commonStyles.button,
           pressed && styles.buttonPressed,
         ]}
+        accessibilityRole="button"
+        accessibilityLabel="Visa recept"
         onPress={() =>
           navigation.navigate("MainTabs", {
             screen: "RecipesTab",
@@ -91,6 +97,8 @@ export default function HomeScreen({ navigation, session }) {
               commonStyles.button,
               pressed && styles.buttonPressed,
             ]}
+            accessibilityRole="button"
+            accessibilityLabel="Lägg till recept"
             onPress={() =>
               navigation.navigate("MainTabs", {
                 screen: "RecipesTab",
@@ -108,6 +116,8 @@ export default function HomeScreen({ navigation, session }) {
               styles.recipesButton,
               pressed && styles.buttonPressed,
             ]}
+            accessibilityRole="button"
+            accessibilityLabel="Logga ut"
             onPress={handleLogout}
           >
             <Text style={styles.buttonText}>Logga ut</Text>

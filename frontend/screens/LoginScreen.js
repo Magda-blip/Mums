@@ -64,6 +64,8 @@ export default function LoginScreen({ navigation }) {
               placeholderTextColor={colours.darkBrown}
               keyboardType="email-address"
               autoCapitalize="none"
+              accessibilityLabel="E-post"
+              accessibilityHint="Ange din e-postadress"
             />
 
             <Text style={commonStyles.label}>Lösenord</Text>
@@ -74,10 +76,14 @@ export default function LoginScreen({ navigation }) {
               placeholder="Ditt lösenord"
               placeholderTextColor={colours.darkBrown}
               secureTextEntry
+              accessibilityLabel="Lösenord"
+              accessibilityHint="Ange ditt lösenord"
             />
 
             <Pressable
               style={commonStyles.button}
+              accessibilityRole="button"
+              accessibilityLabel="Logga in"
               onPress={handleLogin}
             >
               <Text style={commonStyles.buttonText}>Logga in</Text>
@@ -85,6 +91,8 @@ export default function LoginScreen({ navigation }) {
 
             <Pressable
               style={commonStyles.button}
+              accessibilityRole="button"
+              accessibilityLabel="Tillbaka"
               onPress={() => navigation.goBack()}
             >
               <Text style={commonStyles.buttonText}>Tillbaka</Text>
