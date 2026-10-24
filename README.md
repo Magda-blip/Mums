@@ -10,3 +10,6 @@ Inloggade användare kan även:
 -	Skapa egna recept
 -	Lägga till och ta bort recept från favoriter
 -	Logga ut
+
+
+Det går att skapa konto med en fiktiv email då inställningen för närvarande inte kräver e-post verifikation.
